@@ -113,7 +113,7 @@ class RestAuthentication:
         else:
             fetch_token()
         try:
-            response = requests.request(method, url, data, param, headers=self._headers) 
+            response = requests.request(method, url, data, param, header=self._headers) 
             if response.status_code == 200:
                 return response, response.json()
             else:
