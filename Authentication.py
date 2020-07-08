@@ -3,6 +3,8 @@
 import time
 import requests
 from requests.auth import HTTPBasicAuth
+import logging 
+LOGGER=logging.getLogger()
 
 
 class RestAuthentication:
@@ -105,13 +107,18 @@ class RestAuthentication:
         else:
             return True
             
-    def call_http(method, url, **kwargs):
+    def call_http(method, url, param=None, data=None):
         if isAuthTokenValid():
             pass
         else:
             fetch_token()
-        response = requests.request(method, url, **kwargs) 
-        return response, response.json()
-                
+        try:
+            response = requests.request(method, url, data, param, headers=self._headers) 
+            if response.status_code == 200:
+                return response, response.json()
+            else:
+                response.raise_for_status()
+        except requests.exceptions.HTTPError as err:
+            LOGGER.error('Error occured. ErrorCode:{errorcode}, ErrorMsg:{errormsg}'.format(errorcode=response.status_code,errormsg=err))        
 
 

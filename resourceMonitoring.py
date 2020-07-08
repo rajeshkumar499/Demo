@@ -5,7 +5,10 @@ class resourceMonitoring(Object):
         self.resObj = resObj
 
     @abstractmethod
-    def monitoring(self):		
+    def start_monitoring(self):		
         pass
 
+    @abstractmethod
+    def stop_monitoring(self):
+        pass
 

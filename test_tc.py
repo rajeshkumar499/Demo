@@ -42,15 +42,11 @@ def test_demo(testCase,
     resobj2 = Ssh(nodeIp['IP2'], 'admin', 'admin')
 
     #start monitoring parallely
-    p = multiprocessing.Process(target=cpuMonitoring(resobj1))
-    q = multiprocessing.Process(target=cpuMonitoring(resobj2))
-    r = multiprocessing.Process(target=memoryMonitoring(resobj1))
-    s = multiprocessing.Process(target=memoryMonitoring(resobj2))
-    p.start()
-    q.start()
-    r.start()
-    s.start()
-   
+    cpuResObj1 = cpuMonitoring(resobj1))
+    cpuResObj2 = cpuMonitoring(resobj2))
+    memoryResObj1 = memoryMonitoring(resobj1))
+    memoryResObj2 = memoryMonitoring(resobj2))
+    
     #getting authentication done and storing token 
     authObj = RestAuthentication('1.1.1.1', 'rajesh', 'kumar')
    
@@ -63,19 +59,17 @@ def test_demo(testCase,
         else : 
             LOGGER.error('Query Failed')
 
-    # stoping all monitoring
-    p.terminate()
-    q.terminate()
-    r.terminate()
-    s.terminate()
+    #stopping monitoring
+    cpuOutput1 = cpuResObj1.stop_monitoring()
+    cpuOutput2 = cpuResObj2.stop_monitoring()
+    memoryOutput1 = memoryResObj1.stop_monitoring()
+    memoryOutput2 = memoryResObj2.stop_monitoring()
 
-    p.join()
-    q.join()
-    r.join()
-    s.join()
 
     #printing Memory and CPU Data
-    LOGGER.info('Memory Data for Node 1: {memoryData}'.format(memoryData=memoryMonitoring(resobj1).output))
-    LOGGER.info('CPU DATA for Node 1: {cpudata}'.format(cpudata=cpuMonitoring(resobj1).output)) 
+    LOGGER.info('Memory Data for Node 1: {memoryData}'.format(memoryData=memoryOutput1))
+    LOGGER.info('CPU DATA for Node 1: {cpudata}'.format(cpudata=cpuOutput1)) 
 
     #Same for Node 2
+    LOGGER.info('Memory Data for Node 2: {memoryData}'.format(memoryData=memoryOutput1))
+    LOGGER.info('CPU DATA for Node 2: {cpudata}'.format(cpudata=cpuOutput2)) 
